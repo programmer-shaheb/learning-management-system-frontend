@@ -38,16 +38,19 @@ const CourseDetails = () => {
   }, [dispatch, courseId]);
 
   const handleEnroll = async () => {
-    if (!currentUser) navigate("/login");
-    const newStudent = await updateCourse(course.courseId, {
-      id: uuidv4(),
-      name: currentUser?.displayName,
-      email: currentUser?.email,
-    });
-    setIsEnroll(newStudent.acknowledged);
-    if (newStudent.acknowledged) {
-      notify("Successfully Enrolled", "success");
-      navigate("/dashboard");
+    if (!currentUser?.email) {
+      navigate("/login");
+    } else {
+      const newStudent = await updateCourse(course.courseId, {
+        id: uuidv4(),
+        name: currentUser?.displayName,
+        email: currentUser?.email,
+      });
+      setIsEnroll(newStudent.acknowledged);
+      if (newStudent.acknowledged) {
+        notify("Successfully Enrolled", "success");
+        navigate("/dashboard");
+      }
     }
   };
 
